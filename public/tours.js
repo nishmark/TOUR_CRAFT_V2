@@ -450,7 +450,15 @@
           console.log(
             `🎯 TourCraft: Found tour "${tour.name}" with ${tour.steps.length} steps`
           );
-          createTourTrigger(tour);
+          
+          // Check if tour should start automatically
+          if (tour.autoStart) {
+            console.log("🚀 TourCraft: Auto-starting tour...");
+            // Small delay to ensure page is fully loaded
+            setTimeout(() => startTour(tour), 1000);
+          } else {
+            createTourTrigger(tour);
+          }
         } else {
           console.log("TourCraft: No matching tours found for current page");
         }

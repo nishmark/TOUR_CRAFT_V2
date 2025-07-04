@@ -67,6 +67,7 @@ model tcTour {
   stepsOrder   Json     // Array of step IDs in order
   steps        Json     // Array of step data objects
   isActive     Boolean  @default(true)
+  autoStart    Boolean  @default(false) // Whether tour starts automatically
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   

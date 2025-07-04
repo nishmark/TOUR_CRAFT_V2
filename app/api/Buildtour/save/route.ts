@@ -17,6 +17,7 @@ interface TourSaveData {
   motherUrl: string;
   totalSteps: number;
   stepsOrder: number[];
+  autoStart?: boolean; // Whether tour should start automatically
   steps: Array<{
     stepNumber: number;
     textContent: string;
@@ -40,7 +41,14 @@ export async function POST(request: NextRequest) {
 
     // Parse the request body
     const body: TourSaveData = await request.json();
-    const { name, motherUrl, totalSteps, stepsOrder, steps } = body;
+    const {
+      name,
+      motherUrl,
+      totalSteps,
+      stepsOrder,
+      steps,
+      autoStart = false,
+    } = body;
 
     // Validate required fields
     if (!name || !motherUrl || totalSteps === undefined || !steps) {
@@ -91,6 +99,7 @@ export async function POST(request: NextRequest) {
         totalSteps: totalSteps,
         stepsOrder: stepsOrder,
         steps: steps,
+        autoStart: autoStart,
         isActive: true,
       },
     });

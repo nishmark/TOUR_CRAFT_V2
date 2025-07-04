@@ -120,6 +120,7 @@ export default function BuildTourPage() {
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [tourName, setTourName] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [autoStart, setAutoStart] = useState(false);
 
   // Function to update user message for a specific step (local only)
   const updateUserMessage = (stepIndex: number, message: string) => {
@@ -265,6 +266,7 @@ export default function BuildTourPage() {
         totalSteps: tourSteps.length,
         stepsOrder: tourSteps.map((_, index) => index + 1), // Step numbers in order
         steps: formattedSteps,
+        autoStart: autoStart,
       };
 
       const response = await fetch("/api/Buildtour/save", {
@@ -282,6 +284,7 @@ export default function BuildTourPage() {
         alert(`Tour "${tourName}" saved successfully with all messages!`);
         setShowSaveModal(false);
         setTourName("");
+        setAutoStart(false);
         // Optionally clear the steps after saving
         // await clearSteps();
       } else {
@@ -620,11 +623,30 @@ export default function BuildTourPage() {
               </p>
             </div>
 
+            <div className="mb-4">
+              <label className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  checked={autoStart}
+                  onChange={(e) => setAutoStart(e.target.checked)}
+                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                <span className="text-sm font-medium text-gray-700">
+                  Start tour automatically when page loads
+                </span>
+              </label>
+              <p className="text-xs text-gray-500 mt-1">
+                If enabled, the tour will start immediately without requiring
+                user interaction
+              </p>
+            </div>
+
             <div className="flex space-x-3">
               <button
                 onClick={() => {
                   setShowSaveModal(false);
                   setTourName("");
+                  setAutoStart(false);
                 }}
                 className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
                 disabled={isSaving}

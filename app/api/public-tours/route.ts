@@ -44,6 +44,7 @@ export async function GET(request: NextRequest) {
         createdAt: true,
         updatedAt: true,
         steps: true, // This is stored as JSON
+        autoStart: true,
       },
       orderBy: {
         createdAt: "desc",

@@ -28,6 +28,7 @@ export async function GET(request: NextRequest) {
         updatedAt: true,
         motherUrl: true,
         steps: true,
+        autoStart: true,
       },
       orderBy: {
         createdAt: "desc",

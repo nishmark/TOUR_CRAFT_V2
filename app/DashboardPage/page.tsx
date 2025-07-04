@@ -29,6 +29,7 @@ interface Tour {
   createdAt: string;
   updatedAt: string;
   motherUrl: string;
+  autoStart: boolean;
   steps: TourStep[];
 }
 
@@ -216,6 +217,17 @@ export default function Page() {
                           </p>
                           <p className="text-sm text-gray-600">
                             URL: {tour.motherUrl}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            {tour.autoStart ? (
+                              <span className="inline-flex items-center text-green-600">
+                                🚀 Auto-start enabled
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center text-gray-500">
+                                🎯 Manual trigger required
+                              </span>
+                            )}
                           </p>
                         </div>
                         <div className="flex space-x-2">

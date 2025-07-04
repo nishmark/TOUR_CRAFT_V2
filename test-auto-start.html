@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Auto-Start Tour Test</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        line-height: 1.6;
+      }
+      .test-section {
+        margin: 20px 0;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+      }
+      .test-button {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 5px;
+      }
+      .test-button:hover {
+        background: #0056b3;
+      }
+      .status {
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 4px;
+      }
+      .status.success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+      .status.error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+      .status.info {
+        background: #d1ecf1;
+        color: #0c5460;
+        border: 1px solid #bee5eb;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🚀 TourCraft Auto-Start Test Page</h1>
+
+    <div class="test-section">
+      <h2>Test Elements</h2>
+      <p>
+        This page contains various elements that can be used to test tour
+        auto-start functionality.
+      </p>
+
+      <button id="test-button-1" class="test-button">Test Button 1</button>
+      <button id="test-button-2" class="test-button">Test Button 2</button>
+      <button id="test-button-3" class="test-button">Test Button 3</button>
+
+      <div id="test-div-1" class="test-section">
+        <h3>Test Section 1</h3>
+        <p>This is a test section with some content.</p>
+      </div>
+
+      <div id="test-div-2" class="test-section">
+        <h3>Test Section 2</h3>
+        <p>Another test section with different content.</p>
+      </div>
+
+      <input
+        type="text"
+        id="test-input"
+        placeholder="Test input field"
+        style="width: 200px; padding: 8px; margin: 10px"
+      />
+
+      <select id="test-select" style="padding: 8px; margin: 10px">
+        <option value="">Select an option</option>
+        <option value="option1">Option 1</option>
+        <option value="option2">Option 2</option>
+        <option value="option3">Option 3</option>
+      </select>
+    </div>
+
+    <div class="test-section">
+      <h2>Tour Status</h2>
+      <div id="tour-status" class="status info">
+        Waiting for TourCraft to load...
+      </div>
+      <button onclick="checkTourStatus()" class="test-button">
+        Check Tour Status
+      </button>
+      <button onclick="manualStartTour()" class="test-button">
+        Manual Start Tour
+      </button>
+    </div>
+
+    <div class="test-section">
+      <h2>Instructions</h2>
+      <ol>
+        <li>Make sure TourCraft is properly linked to this page</li>
+        <li>Create a tour with auto-start enabled</li>
+        <li>Reload this page to test auto-start functionality</li>
+        <li>Use the "Check Tour Status" button to see if tours are detected</li>
+        <li>Use "Manual Start Tour" to manually trigger a tour if available</li>
+      </ol>
+    </div>
+
+    <script>
+      // Test functions
+      function checkTourStatus() {
+        const statusDiv = document.getElementById("tour-status");
+
+        if (window.TourCraft) {
+          statusDiv.className = "status success";
+          statusDiv.innerHTML = `
+                    ✅ TourCraft is loaded!<br>
+                    Version: ${window.TourCraft.version}<br>
+                    API Key: ${window.TourCraft.apiKey}<br>
+                    <br>
+                    <strong>Available functions:</strong><br>
+                    - window.TourCraft.startTour(tourData)<br>
+                    - window.TourCraft.endTour()<br>
+                    - window.TourCraft.checkForTour()<br>
+                    - window.TourCraft.initialize()
+                `;
+        } else {
+          statusDiv.className = "status error";
+          statusDiv.innerHTML =
+            "❌ TourCraft is not loaded. Make sure the tours.js script is included.";
+        }
+      }
+
+      function manualStartTour() {
+        const statusDiv = document.getElementById("tour-status");
+
+        if (window.TourCraft) {
+          statusDiv.className = "status info";
+          statusDiv.innerHTML = "🔄 Checking for available tours...";
+
+          // Trigger tour check
+          window.TourCraft.checkForTour();
+
+          setTimeout(() => {
+            statusDiv.className = "status success";
+            statusDiv.innerHTML =
+              "✅ Tour check completed. Check console for details.";
+          }, 2000);
+        } else {
+          statusDiv.className = "status error";
+          statusDiv.innerHTML = "❌ TourCraft is not available.";
+        }
+      }
+
+      // Auto-check status when page loads
+      window.addEventListener("load", () => {
+        setTimeout(checkTourStatus, 1000);
+      });
+
+      // Log when TourCraft loads
+      window.addEventListener("TourCraftLoaded", () => {
+        console.log("🎯 TourCraft loaded on test page");
+        checkTourStatus();
+      });
+    </script>
+
+    <!-- Include TourCraft script -->
+    <script src="/tours.js"></script>
+  </body>
+</html>
