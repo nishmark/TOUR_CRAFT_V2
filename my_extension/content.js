@@ -6,11 +6,11 @@ let stepCounter = 0;
 // API endpoint configuration
 function getApiEndpoint() {
   // Production URL - always use this for hosted app
-  const productionUrl = "https://tour-craft-v1.vercel.app/api/Buildtour";
-  
+  const productionUrl = "https://tour-craft-v2-6u9h.vercel.app/api/Buildtour";
+
   console.log("🚀 Using production Vercel API:", productionUrl);
   return productionUrl;
-  
+
   // For local development, uncomment the line below and comment out the return above:
   // return "http://localhost:3000/api/Buildtour";
 }
