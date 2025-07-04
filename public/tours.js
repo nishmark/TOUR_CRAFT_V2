@@ -39,28 +39,78 @@
     }
   }
 
-  function findElementByText(text, tagName = '*') {
+  function findElementByText(text, tagName = "*") {
     try {
-      // Create XPath to find elements containing the text
-      const xpath = `//${tagName}[contains(text(), '${text}')]`;
-      const result = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
-      return result.singleNodeValue;
+      if (!text) return null;
+
+      // Clean the text for better matching
+      const cleanText = text.trim();
+
+      // Try exact match first
+      let xpath = `//${tagName}[contains(text(), '${cleanText}')]`;
+      let result = document.evaluate(
+        xpath,
+        document,
+        null,
+        XPathResult.FIRST_ORDERED_NODE_TYPE,
+        null
+      );
+      if (result.singleNodeValue) {
+        return result.singleNodeValue;
+      }
+
+      // Try case-insensitive match
+      xpath = `//${tagName}[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${cleanText.toLowerCase()}')]`;
+      result = document.evaluate(
+        xpath,
+        document,
+        null,
+        XPathResult.FIRST_ORDERED_NODE_TYPE,
+        null
+      );
+      if (result.singleNodeValue) {
+        return result.singleNodeValue;
+      }
+
+      // Try partial match with first few words
+      const words = cleanText.split(" ").slice(0, 3).join(" ");
+      if (words !== cleanText) {
+        xpath = `//${tagName}[contains(text(), '${words}')]`;
+        result = document.evaluate(
+          xpath,
+          document,
+          null,
+          XPathResult.FIRST_ORDERED_NODE_TYPE,
+          null
+        );
+        if (result.singleNodeValue) {
+          return result.singleNodeValue;
+        }
+      }
+
+      return null;
     } catch (e) {
       console.warn("TourCraft: Error finding element by text:", e);
       return null;
     }
   }
 
-  function findElementsByText(text, tagName = '*') {
+  function findElementsByText(text, tagName = "*") {
     try {
       const elements = [];
       const xpath = `//${tagName}[contains(text(), '${text}')]`;
-      const result = document.evaluate(xpath, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-      
+      const result = document.evaluate(
+        xpath,
+        document,
+        null,
+        XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
+        null
+      );
+
       for (let i = 0; i < result.snapshotLength; i++) {
         elements.push(result.snapshotItem(i));
       }
-      
+
       return elements;
     } catch (e) {
       console.warn("TourCraft: Error finding elements by text:", e);
@@ -342,16 +392,49 @@
 
     const step = currentTour.steps[stepIndex];
     let element = findElement(step.selector);
-    
-    // If selector fails, try finding by text content
-    if (!element && step.textContent) {
-      element = findElementByText(step.textContent);
-    }
-    
-    // If still not found, try finding by any text in the step
-    if (!element && (step.MessageToUser || step.description)) {
-      const searchText = step.MessageToUser || step.description;
-      element = findElementByText(searchText);
+
+    // If selector fails, try multiple fallback strategies
+    if (!element) {
+      console.log("TourCraft: Selector failed, trying fallback methods...");
+
+      // Try by ID if available
+      if (step.id) {
+        element = document.getElementById(step.id);
+        if (element) console.log("TourCraft: Found element by ID:", step.id);
+      }
+
+      // Try by text content
+      if (!element && step.textContent) {
+        element = findElementByText(step.textContent.trim(), step.elementType);
+        if (element) console.log("TourCraft: Found element by text content");
+      }
+
+      // Try by specific tag with text content
+      if (!element && step.textContent && step.elementType) {
+        element = findElementByText(step.textContent.trim(), step.elementType);
+        if (element) console.log("TourCraft: Found element by tag + text");
+      }
+
+      // Try by placeholder text (for form elements)
+      if (!element && step.formData && step.formData.placeholder) {
+        element = document.querySelector(
+          `[placeholder="${step.formData.placeholder}"]`
+        );
+        if (element) console.log("TourCraft: Found element by placeholder");
+      }
+
+      // Try by value attribute
+      if (!element && step.value) {
+        element = document.querySelector(`[value="${step.value}"]`);
+        if (element) console.log("TourCraft: Found element by value");
+      }
+
+      // Try by class name combination
+      if (!element && step.className) {
+        const classSelector = "." + step.className.split(" ").join(".");
+        element = document.querySelector(classSelector);
+        if (element) console.log("TourCraft: Found element by class names");
+      }
     }
 
     // Clear previous highlight
@@ -490,7 +573,7 @@
           console.log(
             `🎯 TourCraft: Found tour "${tour.name}" with ${tour.steps.length} steps`
           );
-          
+
           // Check if tour should start automatically
           if (tour.autoStart) {
             console.log("🚀 TourCraft: Auto-starting tour...");
