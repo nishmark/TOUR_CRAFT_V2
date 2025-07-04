@@ -138,19 +138,20 @@ export default function BuildTourPage() {
       if (response.ok) {
         const data = await response.json();
         const newSteps = data.steps || [];
-        
+
         // Preserve user messages from current state when updating with new data
-        setTourSteps(prevSteps => {
+        setTourSteps((prevSteps) => {
           return newSteps.map((newStep: TourStep, index: number) => {
             const existingStep = prevSteps[index];
             return {
               ...newStep,
               // Preserve the user message if it exists in the current state
-              MessageToUser: existingStep?.MessageToUser || newStep.MessageToUser || ""
+              MessageToUser:
+                existingStep?.MessageToUser || newStep.MessageToUser || "",
             };
           });
         });
-        
+
         setIsConnected(true);
       } else {
         setIsConnected(false);
@@ -159,22 +160,6 @@ export default function BuildTourPage() {
       console.error("Failed to fetch tour steps:", error);
       setIsConnected(false);
     }
-  }, []);
-
-  // Set localhost detection on client-side
-  useEffect(() => {
-    const checkLocalhost = () => {
-      const isLocalhost =
-        typeof window !== "undefined" &&
-        (window.location.hostname === "localhost" ||
-          window.location.hostname === "127.0.0.1");
-      const isBuildtourPage =
-        typeof window !== "undefined" &&
-        window.location.pathname === "/Buildtour";
-      setIsLocalhost(isLocalhost && isBuildtourPage);
-    };
-
-    checkLocalhost();
   }, []);
 
   // Initial data fetch on component mount
