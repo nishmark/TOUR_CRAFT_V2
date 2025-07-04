@@ -39,6 +39,35 @@
     }
   }
 
+  function findElementByText(text, tagName = '*') {
+    try {
+      // Create XPath to find elements containing the text
+      const xpath = `//${tagName}[contains(text(), '${text}')]`;
+      const result = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+      return result.singleNodeValue;
+    } catch (e) {
+      console.warn("TourCraft: Error finding element by text:", e);
+      return null;
+    }
+  }
+
+  function findElementsByText(text, tagName = '*') {
+    try {
+      const elements = [];
+      const xpath = `//${tagName}[contains(text(), '${text}')]`;
+      const result = document.evaluate(xpath, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+      
+      for (let i = 0; i < result.snapshotLength; i++) {
+        elements.push(result.snapshotItem(i));
+      }
+      
+      return elements;
+    } catch (e) {
+      console.warn("TourCraft: Error finding elements by text:", e);
+      return [];
+    }
+  }
+
   // API functions
   async function fetchToursFromAPI() {
     try {
@@ -312,7 +341,18 @@
     }
 
     const step = currentTour.steps[stepIndex];
-    const element = findElement(step.selector);
+    let element = findElement(step.selector);
+    
+    // If selector fails, try finding by text content
+    if (!element && step.textContent) {
+      element = findElementByText(step.textContent);
+    }
+    
+    // If still not found, try finding by any text in the step
+    if (!element && (step.MessageToUser || step.description)) {
+      const searchText = step.MessageToUser || step.description;
+      element = findElementByText(searchText);
+    }
 
     // Clear previous highlight
     if (highlightElement) {
@@ -504,6 +544,9 @@
     endTour,
     checkForTour,
     initialize,
+    findElement,
+    findElementByText,
+    findElementsByText,
     version: "1.0.0",
     apiKey: API_KEY,
   };
