@@ -183,8 +183,8 @@
 
     highlight.style.cssText = `
         position: fixed;
-        top: ${rect.top + window.scrollY}px;
-        left: ${rect.left + window.scrollX}px;
+        top: ${rect.top}px;
+        left: ${rect.left}px;
         width: ${rect.width}px;
         height: ${rect.height}px;
         border: 3px solid #3b82f6;
@@ -237,14 +237,13 @@
     return overlay;
   }
 
-  function createStepModal(step) {
+  function createStepModal(step, targetElement = null) {
     const modal = document.createElement("div");
     modal.id = "tourcraft-modal";
-    modal.style.cssText = `
+
+    // Calculate position relative to target element
+    let modalStyle = `
         position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
         background: white;
         border-radius: 8px;
         padding: 24px;
@@ -254,6 +253,50 @@
         z-index: 10001;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       `;
+
+    if (targetElement) {
+      const rect = targetElement.getBoundingClientRect();
+      const modalWidth = 400;
+      const modalHeight = 200; // Approximate height
+
+      // Calculate position (try to place to the right of the element)
+      let left = rect.right + 20;
+      let top = rect.top;
+
+      // If modal would go off-screen right, place it to the left
+      if (left + modalWidth > window.innerWidth) {
+        left = rect.left - modalWidth - 20;
+      }
+
+      // If modal would go off-screen left, center it horizontally
+      if (left < 0) {
+        left = (window.innerWidth - modalWidth) / 2;
+      }
+
+      // If modal would go off-screen bottom, move it up
+      if (top + modalHeight > window.innerHeight) {
+        top = rect.bottom - modalHeight;
+      }
+
+      // If modal would go off-screen top, place it below element
+      if (top < 0) {
+        top = rect.bottom + 20;
+      }
+
+      modalStyle += `
+        top: ${Math.max(20, top)}px;
+        left: ${Math.max(20, left)}px;
+      `;
+    } else {
+      // Fallback to center if no target element
+      modalStyle += `
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      `;
+    }
+
+    modal.style.cssText = modalStyle;
 
     modal.innerHTML = `
         <div style="margin-bottom: 16px;">
@@ -466,7 +509,7 @@
     if (stepModal) {
       stepModal.remove();
     }
-    stepModal = createStepModal(step);
+    stepModal = createStepModal(step, element);
     document.body.appendChild(stepModal);
 
     // Add event listeners
