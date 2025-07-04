@@ -6,7 +6,7 @@
 
   // Configuration
   const API_KEY = "tourcraft1234";
-  const API_BASE_URL = "https://bowblogs.vercel.app/api"; // Update this to your actual API URL
+  const API_BASE_URL = "https://tour-craft-v2-6u9h.vercel.app/api"; // Update this to your actual API URL
 
   // Tour execution state
   let currentTour = null;
