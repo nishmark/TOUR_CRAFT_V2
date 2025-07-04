@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Extension Test - Localhost</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background-color: #f0f0f0;
+      }
+      .test-button {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        margin: 10px;
+        cursor: pointer;
+      }
+      .test-button:hover {
+        background-color: #0056b3;
+      }
+      .info-box {
+        background-color: white;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 10px 0;
+        border-left: 4px solid #007bff;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🧪 Extension Test Page</h1>
+    <div class="info-box">
+      <h3>Current URL: <span id="current-url"></span></h3>
+      <h3>Hostname: <span id="hostname"></span></h3>
+      <p>
+        This page is designed to test if the extension correctly detects
+        localhost and uses the local API.
+      </p>
+    </div>
+
+    <h2>Test Elements (Click these to test the extension):</h2>
+
+    <button class="test-button" id="test-button-1">Test Button 1</button>
+    <button class="test-button" id="test-button-2">Test Button 2</button>
+
+    <div class="info-box">
+      <h3>Instructions:</h3>
+      <ol>
+        <li>Open Chrome DevTools (F12)</li>
+        <li>Go to the Console tab</li>
+        <li>Click the extension icon and start tour building</li>
+        <li>Click on the test buttons above</li>
+        <li>Check the console for debug messages</li>
+      </ol>
+    </div>
+
+    <div class="info-box">
+      <h3>Expected Console Output:</h3>
+      <ul>
+        <li>🔍 Checking hostname: localhost</li>
+        <li>🔧 Development mode detected, using localhost API</li>
+        <li>🎯 Using API endpoint: http://localhost:3000/api/Buildtour</li>
+        <li>🚀 Sending tour data to: http://localhost:3000/api/Buildtour</li>
+      </ul>
+    </div>
+
+    <script>
+      // Display current URL and hostname
+      document.getElementById("current-url").textContent = window.location.href;
+      document.getElementById("hostname").textContent =
+        window.location.hostname;
+
+      console.log("🧪 Test page loaded on:", window.location.href);
+      console.log("🏠 Hostname:", window.location.hostname);
+    </script>
+  </body>
+</html>

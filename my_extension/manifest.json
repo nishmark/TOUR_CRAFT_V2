@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "Tour Builder Extension",
+  "version": "1.0",
+  "description": "Chrome extension for building guided tours by tracking user interactions",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Tour Builder"
+  },
+  "permissions": ["activeTab", "scripting", "storage"],
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content.js"],
+      "css": ["highlight.css"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["debug-extension.js"],
+      "matches": ["http://*/*", "https://*/*"]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}

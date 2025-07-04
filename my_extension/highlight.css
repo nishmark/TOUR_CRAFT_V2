@@ -1,0 +1,20 @@
+/* Tour Builder Highlight Styles */
+body.tour-building-active {
+  cursor: crosshair !important;
+}
+
+body.tour-building-active * {
+  cursor: crosshair !important;
+}
+
+#tour-builder-highlight {
+  box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.4) !important;
+}
+
+/* Prevent text selection during tour building */
+body.tour-building-active {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}

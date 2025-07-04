@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tour Extension Test Page</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        line-height: 1.6;
+      }
+      .test-section {
+        margin: 20px 0;
+        padding: 20px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+      }
+      .test-section h2 {
+        margin-top: 0;
+        color: #333;
+      }
+      button {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 5px;
+      }
+      button:hover {
+        background: #0056b3;
+      }
+      input,
+      textarea {
+        width: 100%;
+        padding: 8px;
+        margin: 5px 0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      .highlight {
+        background: #fff3cd;
+        padding: 10px;
+        border-radius: 4px;
+        margin: 10px 0;
+      }
+      #console-output {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        padding: 15px;
+        border-radius: 4px;
+        font-family: monospace;
+        max-height: 300px;
+        overflow-y: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Tour Extension Test Page</h1>
+    <p>
+      This page is designed to test the Tour Builder extension. Use the
+      extension to record interactions with the elements below.
+    </p>
+
+    <div class="test-section">
+      <h2>Buttons</h2>
+      <button id="test-button-1">Click me first</button>
+      <button id="test-button-2">Click me second</button>
+      <button id="test-button-3">Click me third</button>
+    </div>
+
+    <div class="test-section">
+      <h2>Form Elements</h2>
+      <label for="test-input">Text Input:</label>
+      <input type="text" id="test-input" placeholder="Enter some text" />
+
+      <label for="test-email">Email Input:</label>
+      <input type="email" id="test-email" placeholder="Enter email" />
+
+      <label for="test-select">Select Dropdown:</label>
+      <select id="test-select">
+        <option value="">Choose an option</option>
+        <option value="option1">Option 1</option>
+        <option value="option2">Option 2</option>
+        <option value="option3">Option 3</option>
+      </select>
+
+      <label for="test-textarea">Textarea:</label>
+      <textarea
+        id="test-textarea"
+        rows="3"
+        placeholder="Enter longer text"
+      ></textarea>
+    </div>
+
+    <div class="test-section">
+      <h2>Links</h2>
+      <a href="#" id="test-link-1">Test Link 1</a> |
+      <a href="#" id="test-link-2">Test Link 2</a> |
+      <a href="#" id="test-link-3">Test Link 3</a>
+    </div>
+
+    <div class="test-section">
+      <h2>Interactive Elements</h2>
+      <div class="highlight" id="highlight-div">
+        This is a highlightable div element
+      </div>
+      <span id="test-span">This is a span element</span>
+      <p id="test-paragraph">
+        This is a paragraph element with some text content.
+      </p>
+    </div>
+
+    <div class="test-section">
+      <h2>Console Output</h2>
+      <div id="console-output">
+        <div>
+          Extension test page loaded. Open the Tour Builder extension and start
+          recording!
+        </div>
+      </div>
+      <button onclick="clearConsole()">Clear Console</button>
+    </div>
+
+    <script>
+      // Add some interactive behavior
+      document
+        .getElementById("test-button-1")
+        .addEventListener("click", function () {
+          logToConsole("Button 1 clicked");
+        });
+
+      document
+        .getElementById("test-button-2")
+        .addEventListener("click", function () {
+          logToConsole("Button 2 clicked");
+        });
+
+      document
+        .getElementById("test-button-3")
+        .addEventListener("click", function () {
+          logToConsole("Button 3 clicked");
+        });
+
+      document
+        .getElementById("test-input")
+        .addEventListener("input", function () {
+          logToConsole("Input changed: " + this.value);
+        });
+
+      document
+        .getElementById("test-select")
+        .addEventListener("change", function () {
+          logToConsole("Select changed: " + this.value);
+        });
+
+      document
+        .getElementById("highlight-div")
+        .addEventListener("click", function () {
+          logToConsole("Highlight div clicked");
+        });
+
+      function logToConsole(message) {
+        const consoleOutput = document.getElementById("console-output");
+        const timestamp = new Date().toLocaleTimeString();
+        const logEntry = document.createElement("div");
+        logEntry.textContent = `[${timestamp}] ${message}`;
+        consoleOutput.appendChild(logEntry);
+        consoleOutput.scrollTop = consoleOutput.scrollHeight;
+      }
+
+      function clearConsole() {
+        document.getElementById("console-output").innerHTML =
+          "<div>Console cleared</div>";
+      }
+
+      // Log page load
+      logToConsole("Test page loaded successfully");
+      logToConsole("Ready for Tour Builder extension testing");
+    </script>
+  </body>
+</html>

@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+//This schema is linked to other website i have created. do not delete/modify this schema.
+model Blog {
+  id          String   @id
+  title       String
+  body        String   @db.Text
+  image       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+  isPublished Boolean  @default(false)
+  authorId    String
+  isSaved     Boolean?
+
+  @@index([authorId])
+}
+
+//This schema is linked to other website i have created. do not delete/modify this schema.
+model User {
+  id        String   @id
+  email     String   @unique
+  name      String?
+  image     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+}
+
+
+
+
+model tcUser {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String?  // User's display name
+  emailVerified Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  
+  tours tcTour[]
+}
+
+model tcApiKey {
+  id          String   @id @default(cuid())
+  key         String   @unique  // "amazon1234" - you create this manually
+  name        String   // "Amazon Inc"
+  domain      String   // "amazon.com"
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  
+  tours tcTour[]
+}
+
+model tcTour {
+  id           String   @id @default(cuid())
+  apiKeyId     String   // Links to ApiKey, not User
+  userId       String   // Who created this tour
+  name         String
+  motherUrl    String   // The main URL where the tour was created
+  totalSteps   Int      // Total number of steps
+  stepsOrder   Json     // Array of step IDs in order
+  steps        Json     // Array of step data objects
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  apiKey tcApiKey @relation(fields: [apiKeyId], references: [id])
+  user   tcUser   @relation(fields: [userId], references: [id])
+  
+  @@index([apiKeyId])
+  @@index([userId])
+  @@index([motherUrl])
+  @@index([name])
+}

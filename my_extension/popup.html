@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tour Builder</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🎯 Tour Builder</h1>
+        <p>Build guided tours for your website</p>
+      </div>
+
+      <div class="status-section">
+        <div class="status-indicator">
+          <span id="statusDot" class="status-dot"></span>
+          <span id="statusText">Ready to build</span>
+        </div>
+        <div id="stepCounter" class="step-counter">Steps recorded: 0</div>
+      </div>
+
+      <div class="controls">
+        <button id="startTour" class="btn btn-primary">
+          <span class="btn-icon">▶️</span>
+          Start Building Tour
+        </button>
+        <button id="stopTour" class="btn btn-secondary" disabled>
+          <span class="btn-icon">⏹️</span>
+          Stop Building
+        </button>
+      </div>
+
+      <div class="instructions">
+        <h3>Instructions:</h3>
+        <ol>
+          <li>Click "Start Building Tour"</li>
+          <li>Navigate to your website</li>
+          <li>Hover over elements to highlight them</li>
+          <li>Click elements to record tour steps</li>
+          <li>Click "Stop Building" when done</li>
+        </ol>
+      </div>
+
+      <div id="message" class="message"></div>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>
